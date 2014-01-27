@@ -1,0 +1,17 @@
+<html>
+	<title>Login</title>
+		<body>
+			<h1>Login</h1>
+			<form method="post">
+			{% csrf_token %}
+			{% if tried_validation %}
+				<p>
+					<font color="red">Username or password invalid. Please try again.</font></p>
+				</p>
+			{% endif %}
+			User Name: <input type="text" name="username"> <br>
+			Password: <input type="text" name="password"> <br>
+			<input type="submit" name="login" value="login" action=""> <br>
+			</form>
+		</body>
+</html>

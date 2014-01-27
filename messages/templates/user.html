@@ -1,0 +1,34 @@
+<html>
+	<title>Hello {{ username }}!</title>
+	<h1>
+		{% ifequal username current_user %}
+		{{ username }}, welcome to your homepage!
+		{% endifequal %}
+		{% ifnotequal username current_user %}
+		Welcome to {{ username }}'s homepage!
+		{% endifnotequal %}
+	</h1>
+	<body>
+		{% ifnotequal username current_user %}
+		<div id="login">
+			<a href="/login/">Login</a> to view or send messages.
+		</div>
+		{% endifnotequal %}
+		{% ifequal username current_user %}
+		<div id="logout">
+			<a href="/logout/">Logout</a>
+		</div>
+		{% endifequal %}
+		{% ifequal username current_user %}
+		<div id="inbox">
+			<p><b>Inbox</b></p>
+				{% for message in messages %}
+					<p>{{ message.message }}</p>
+				{% endfor %}
+		</div>
+		<div id="send_message">
+			<a href="/user/{{ username }}/message/">Send a message</a>
+		</div>
+		{% endifequal %}
+	</body>
+</html>

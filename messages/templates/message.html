@@ -1,0 +1,52 @@
+<html>
+	<title>Send message</title>
+	<body>
+		<p>{{ username }}, write your message here.</p>
+		<form action="" method="post" id="message_form">
+			{% csrf_token %}
+			<div id="message_audience">
+				<p>Choose the audience for your message.</p>
+				{% if nonexistent_users %}
+				<p>
+					<font color="red">
+					The following users don't exist: 
+					{% for user in nonexistent_users %}
+					{{ user }} 
+					{% endfor %}
+					</font>
+				</p>
+				{% endif %}
+				<p>
+					<input type="radio" name="message_type" value="single" checked="checked">Single User
+					username(s): <input type="text" name="users"><br>
+				</p>
+				{% if nonexistent_groups %}
+				<p>
+					<font color="red">
+					The following groups don't exist: 
+					{% for group in nonexistent_groups %}
+					{{ group }} 
+					{% endfor %}
+					</font>
+				</p>
+				{% endif %}
+				<p>
+					<input type="radio" name="message_type" value="group">Group
+					group: <input type="text" name="group"><br>
+				</p>
+				<p>
+					<input type="radio" name="message_type" value="broadcast">Broadcast<br>
+				</p>
+			</div>
+			<p>Enter your message here:</p>
+			<textarea name="message" form="message_form" rows="10" cols="80">Limit message to 1024 characters.</textarea>
+			<p><input type="submit" value="submit"></p>
+			{% if users_sent > 0 %}
+				You just sent the message to {{ users_sent }} user(s).
+			{% endif %}
+		</form>
+		<div id="footer">
+			<a href="/user/{{ username }}/">Go back to your home page</a>
+		</div>
+	</body>
+</html>
