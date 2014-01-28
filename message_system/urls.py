@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
-from messages.views import user_login, user_page, user_logout, send_message
+from messages.views import user_login, user_page, user_logout, send_message, view_message
 
 from django.contrib import admin
 admin.autodiscover()
@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     url(r'^login/$', user_login),
     url(r'^user/([A-Za-z0-9]+)/$', user_page),
     url(r'^user/([A-Za-z0-9]+)/message/$', send_message),
+    url(r'^user/([A-Za-z0-9]+)/view_message/(\d+)/$', view_message),
     url(r'^logout/$', user_logout),
 )

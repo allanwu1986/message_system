@@ -1,0 +1,10 @@
+<html>
+	<title>From {{ message.writer }}: {{ message.brief }}</title>
+	<body>
+		<p><b>From {{ message.from }}: {{ message.brief }}</b></p>
+		{{ message.message }}
+		<div id="footer">
+			<p><a href="/user/{{ username }}/">Go back to your homepage.</a></p>
+		</div>
+	</body>
+</html>

@@ -26,19 +26,22 @@
 				{% csrf_token %}
 					<table border="1">
 					<tr>
+						<th>From</th>
+						<th>Message</th>
 						<th>Mark as read</th>
 						<th>Delete</th>
-						<th>Message</th>
 					</tr>
 					{% for message in messages %}
 						{% if message.exists %}
 						<tr>
+							<td><b><a href="/user/{{ message.writer }}/">{{ message.writer }}</a></b></td>
+							<td><a href="/user/{{ username }}/view_message/{{ message.id }}/">{{ message.message }}</a></td>
 							<td><input type="checkbox" name="read_messages" value="{{ message.id }}" {% if message.read %}checked{% endif %}></td>
 							<td><input type="checkbox" name="delete_messages" value="{{ message.id }}"></td>
-							<td><b>From <a href="/user/{{ message.writer }}/">{{ message.writer }}</a>: </b>{{ message.message }}</td>
 						</tr>
 						{% else %}
 						<tr>
+							<td></td>
 							<td></td>
 							<td></td>
 							<td><font color="red">Message was removed.</font></td>

@@ -43,12 +43,36 @@ def user_page(request, name):
         for m in all_messages:
             try:
                 cached_message = CachedMessage.objects.get(id=m.message)
-                messages.append({'writer': cached_message.writer.username, 'message': cached_message.message, 'read': m.read, 'exists': True, 'id': m.id})
+                temp_message = cached_message.message
+                brief_message = temp_message[0:40]
+                if len(brief_message) < len(temp_message):
+                    brief_message = brief_message + "..."
+                messages.append({'writer': cached_message.writer.username, 'message': brief_message, 'read': m.read, 'exists': True, 'id': m.id})
             except CachedMessage.DoesNotExist:
                 messages.append({'exists': False})
         return render(request, 'user.html', {'username': name, 'current_user': request.user.username, 'messages': messages})
     except User.DoesNotExist:
         raise Http404
+
+def view_message(request, username, msg_id):
+    if request.user.username != username:
+        raise Http404
+    else:
+        message = ''
+        brief_message = ''
+        writer = ''
+        msg_id = int(msg_id)
+        try:
+            UserMessage.objects.filter(id=msg_id).update(read=True)
+            cached_message = CachedMessage.objects.get(id=UserMessage.objects.get(id=msg_id).message)
+            writer = cached_message.writer.username
+            message = cached_message.message
+            brief_message = message[0:40]
+            if len(brief_message) < len(message):
+                brief_message = brief_message + "..."
+        except USerMessage.DoesNotExist:
+            pass
+        return render(request, 'view_message.html', {'username': request.user.username, 'message': {'brief': brief_message, 'message': message, 'writer': writer}})
 
 def send_message(request, username):
     if request.user.username != username:
