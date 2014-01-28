@@ -23,7 +23,7 @@
 		<div id="inbox">
 			<p><b>Inbox</b></p>
 				{% for message in messages %}
-					<p>{{ message.message }}</p>
+					<p>from <a href="/user/{{ message.writer }}/">{{ message.writer }}</a>: {{ message.message }}</p>
 				{% endfor %}
 		</div>
 		<div id="send_message">

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
-from messages.models import Inbox, CachedMessage
+from messages.models import Inbox, CachedMessage, UserMessage
 
 def user_login(request):
     if 'username' in request.POST and 'password' in request.POST:
@@ -30,7 +30,15 @@ def user_page(request, name):
         except Inbox.DoesNotExist:
             inbox = Inbox.objects.create(owner=u)
             inbox.save()
-        return render(request, 'user.html', {'username': name, 'current_user': request.user.username, 'messages': inbox.messages.all()})
+        all_messages = inbox.messages.all()
+        messages = []
+        for m in all_messages:
+            try:
+                cached_message = CachedMessage.objects.get(id=m.message)
+                messages.append({'writer': cached_message.writer.username, 'message': cached_message.message, 'read': m.read, 'exists': True})
+            except CachedMessage.DoesNotExist:
+                messages.append({'exists': False})
+        return render(request, 'user.html', {'username': name, 'current_user': request.user.username, 'messages': messages})
     except User.DoesNotExist:
         raise Http404
 
@@ -39,7 +47,7 @@ def send_message(request, username):
         raise Http404
     else:
         users = []
-        user_count = 0
+#        user_count = 0
         if 'message_type' in request.POST and 'message' in request.POST:
             message_type = request.POST['message_type']
             message = request.POST['message']
@@ -79,6 +87,8 @@ def send_message(request, username):
                     except Inbox.DoesNotExist:
                         inbox = Inbox.objects.create(owner=u)
                         inbox.save()
-                    inbox.messages.add(m)
-                    user_count += 1
-        return render(request, 'message.html', {'username': request.user.username, 'users_sent': user_count})
+                    usermessage = UserMessage(read=False,message=m.id)
+                    usermessage.save()
+                    inbox.messages.add(usermessage)
+#                    user_count += 1
+        return render(request, 'message.html', {'username': request.user.username, 'users_sent': users})

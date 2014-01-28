@@ -41,8 +41,8 @@
 			<p>Enter your message here:</p>
 			<textarea name="message" form="message_form" rows="10" cols="80">Limit message to 1024 characters.</textarea>
 			<p><input type="submit" value="submit"></p>
-			{% if users_sent > 0 %}
-				You just sent the message to {{ users_sent }} user(s).
+			{% if users_sent|length > 0 %}
+				Attempting to send the message to {{ users_sent|length }} user(s).
 			{% endif %}
 		</form>
 		<div id="footer">
