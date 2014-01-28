@@ -22,9 +22,32 @@
 		{% ifequal username current_user %}
 		<div id="inbox">
 			<p><b>Inbox</b></p>
-				{% for message in messages %}
-					<p>from <a href="/user/{{ message.writer }}/">{{ message.writer }}</a>: {{ message.message }}</p>
-				{% endfor %}
+				<form method="post">
+				{% csrf_token %}
+					<table border="1">
+					<tr>
+						<th>Mark as read</th>
+						<th>Delete</th>
+						<th>Message</th>
+					</tr>
+					{% for message in messages %}
+						{% if message.exists %}
+						<tr>
+							<td><input type="checkbox" name="read_messages" value="{{ message.id }}" {% if message.read %}checked{% endif %}></td>
+							<td><input type="checkbox" name="delete_messages" value="{{ message.id }}"></td>
+							<td><b>From <a href="/user/{{ message.writer }}/">{{ message.writer }}</a>: </b>{{ message.message }}</td>
+						</tr>
+						{% else %}
+						<tr>
+							<td></td>
+							<td></td>
+							<td><font color="red">Message was removed.</font></td>
+						</tr>
+						{% endif %}
+					{% endfor %}
+					</table>
+					<input type="submit" name="Update" value="update" action="">
+				<form>
 		</div>
 		<div id="send_message">
 			<a href="/user/{{ username }}/message/">Send a message</a>

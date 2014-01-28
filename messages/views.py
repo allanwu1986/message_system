@@ -24,6 +24,14 @@ def user_page(request, name):
         u = User.objects.get(username=name)
         if not u.is_active:
             raise User.DoesNotExist('User is inactivated.')
+        if 'read_messages' in request.POST:
+            read_messages = [int(x) for x in request.POST.getlist('read_messages')]
+            for m in read_messages:
+                UserMessage.objects.filter(id=m).update(read=True)
+        if 'delete_messages' in request.POST:
+            delete_messages = [int(x) for x in request.POST.getlist('delete_messages')]
+            for m in delete_messages:
+                UserMessage.objects.get(id=m).delete()
         inbox = None
         try:
             inbox = Inbox.objects.get(owner=u)
@@ -35,7 +43,7 @@ def user_page(request, name):
         for m in all_messages:
             try:
                 cached_message = CachedMessage.objects.get(id=m.message)
-                messages.append({'writer': cached_message.writer.username, 'message': cached_message.message, 'read': m.read, 'exists': True})
+                messages.append({'writer': cached_message.writer.username, 'message': cached_message.message, 'read': m.read, 'exists': True, 'id': m.id})
             except CachedMessage.DoesNotExist:
                 messages.append({'exists': False})
         return render(request, 'user.html', {'username': name, 'current_user': request.user.username, 'messages': messages})
