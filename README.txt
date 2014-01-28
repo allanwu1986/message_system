@@ -6,6 +6,15 @@ much easier. To create users and groups I used the Django admin interface. Users
 can be assigned to one or more groups, and the message sending mechanism uses
 these users and groups as a basis of its sending mechanism.
 
+How to use the website:
+
+To create users and groups, go to http(s)://www.mysite.com/admin/ to access the
+Django admin interface. The homepage of the website is
+http(s)://www.mysite.com/login/ which logs you in as a user created with the
+admin tool.
+
+The Data model:
+
 The data model for this app is in messages/models.py. Let's take a look at it.
 
 from django.db import models
