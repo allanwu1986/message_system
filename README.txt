@@ -13,6 +13,18 @@ Django admin interface. The homepage of the website is
 http(s)://www.mysite.com/login/ which logs you in as a user created with the
 admin tool.
 
+After logging in, you can view your message clicking on messages in your Inbox.
+To delete a message or mark a message, you select the appropriate checkbox and
+press the "Update" button. Messages are also automatically marked as read after
+they are read. To send a message, click on the "Send a message" button at the
+bottom, a new page will load. Select which type of message, single user, group
+or broadcast. Single user will send a message to a single user, but if you
+provide a list of usernames separated by commas (no spaces in between) you can
+send messages to multiple users. The same applies to group messages.
+Broadcasting sends messages to all users. If sending messages is successful, a
+message will appear at the bottom telling how many user it is attempting to
+send the message to.
+
 The Data model:
 
 The data model for this app is in messages/models.py. Let's take a look at it.
